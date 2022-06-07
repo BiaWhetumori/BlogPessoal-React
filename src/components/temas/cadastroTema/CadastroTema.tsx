@@ -2,15 +2,18 @@ import React, {useState, useEffect, ChangeEvent} from 'react'
 import { Container, Typography, TextField, Button } from "@material-ui/core"
 import {useNavigate, useParams } from 'react-router-dom'
 import './cadastroTema.css';
-import useLocalStorage from 'react-use-localstorage';
 import Tema from '../../../models/Tema';
 import { buscaId, post, put } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
 
 
 function CadastroTema() {
     let navigate = useNavigate();
     const { id } = useParams<{id: string}>();
-    const [token, setToken] = useLocalStorage('token');
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+      );
     const [tema, setTema] = useState<Tema>({
         id: 0,
         descricao: ''
@@ -19,7 +22,7 @@ function CadastroTema() {
     useEffect(() => {
         if (token == "") {
             alert("Você precisa estar logado")
-          navigate("/login")
+            navigate("/login")
     
         }
     }, [token])
@@ -49,7 +52,7 @@ function CadastroTema() {
         
         async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
             e.preventDefault()
-            console.log("tema " + JSON.stringify(tema))
+            console.log("temas " + JSON.stringify(tema))
     
             if (id !== undefined) {
                 console.log(tema)
